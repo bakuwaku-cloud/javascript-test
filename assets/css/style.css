@@ -89,3 +89,11 @@ main p {
 .hide {
     display: none;
 }
+
+.feedback {
+    color: grey;
+    font-size: 1.2rem;
+    height: 2rem; 
+    margin-top: 1rem;
+    text-align: center;
+}

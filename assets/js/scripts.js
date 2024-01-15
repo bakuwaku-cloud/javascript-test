@@ -116,21 +116,27 @@ function showQuestion(question) {
 function selectAnswer(e) {
     const selectedButton = e.target;
     const correct = selectedButton.dataset.correct === 'true';
+    const feedbackElement = document.getElementById('feedback');
 
-    if (!correct) {
-        timeLeft -= 10; 
+    if (correct) {
+        feedbackElement.textContent = 'Correct!';
+    } else {
+        feedbackElement.textContent = 'Wrong!';
+        timeLeft -= 10;
         if (timeLeft < 0) {
             timeLeft = 0;
         }
         timerElement.textContent = timeLeft;
     }
-
-    if (shuffledQuestions.length > currentQuestionIndex + 1) {
-        currentQuestionIndex++;
-        setNextQuestion();
-    } else {
-        endGame();
-    }
+    setTimeout(() => {
+        if (shuffledQuestions.length > currentQuestionIndex + 1) {
+            currentQuestionIndex++;
+            setNextQuestion();
+        } else {
+            endGame();
+        }
+        feedbackElement.textContent = '';
+    }, 1000);
 }
 
 startButton.addEventListener('click', startGame);
