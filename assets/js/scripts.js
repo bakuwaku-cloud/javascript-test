@@ -182,7 +182,6 @@ function displayHighScores() {
     });
 
     document.getElementById('quiz-intro').classList.add('hide');
-    document.getElementById('quiz-container').classList.add('hide');
     document.getElementById('end-screen').classList.add('hide');
     const highScoresElement = document.getElementById('high-scores');
     highScoresElement.classList.remove('hide');
