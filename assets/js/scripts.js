@@ -19,7 +19,7 @@ const domRefs = {
     endScreen: document.getElementById('end-screen'),
     highScoreForm: document.getElementById('highscore-form'),
     initials: document.getElementById('initials'),
-    submitButton: document.getElementByType('submit'),
+    submitButton: document.getElementById('submit'),
     finalScoreElement: document.getElementById('final-score'),
     initialsInput: document.getElementById('initials'),
     highScoresElement: document.getElementById('high-scores'),
