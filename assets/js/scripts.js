@@ -171,6 +171,16 @@ function saveHighScore(event) {
 }
 
 function displayHighScores() {
+    let highscores = JSON.parse(localStorage.getItem('highscores')) || [];
+    highscores.sort((a, b) => b.score - a.score); 
+    const highScoresList = document.getElementById('high-scores-list');
+    highScoresList.innerHTML = ''; 
+    highscores.forEach(highscore => {
+        const li = document.createElement('li');
+        li.textContent = `${highscore.initials} - ${highscore.score}`;
+        highScoresList.appendChild(li);
+    });
+
     document.getElementById('quiz-container').classList.add('hide');
     document.getElementById('end-screen').classList.add('hide');
     const highScoresElement = document.getElementById('high-scores');
