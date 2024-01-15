@@ -181,6 +181,7 @@ function displayHighScores() {
         highScoresList.appendChild(li);
     });
 
+    document.getElementById('quiz-intro').classList.add('hide');
     document.getElementById('quiz-container').classList.add('hide');
     document.getElementById('end-screen').classList.add('hide');
     const highScoresElement = document.getElementById('high-scores');
@@ -204,3 +205,8 @@ function goBack() {
     document.getElementById('high-scores').classList.add('hide');
     document.getElementById('quiz-container').classList.remove('hide');
 }
+
+document.getElementById('view-highscores').addEventListener('click', function(event) {
+    event.preventDefault(); 
+    displayHighScores(); 
+});
