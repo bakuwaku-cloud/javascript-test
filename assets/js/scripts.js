@@ -10,6 +10,7 @@ function startGame() {
     startButton.classList.add('hide');
     quizIntro.classList.add('hide');
     questionContainer.classList.remove('hide');
+    score = 0;
 
     shuffledQuestions = questions.sort(() => Math.random() - .5);
     currentQuestionIndex = 0;
@@ -129,6 +130,7 @@ function selectAnswer(e) {
             timeLeft = 0;
         }
         timerElement.textContent = timeLeft;
+        score -= 10;
     }
     setTimeout(() => {
         if (shuffledQuestions.length > currentQuestionIndex + 1) {
@@ -150,4 +152,22 @@ function endGame() {
     document.getElementById('final-score').textContent = finalScore;
     questionContainer.classList.add('hide');
     document.getElementById('end-screen').classList.remove('hide');
+}
+
+document.getElementById('highscore-form').addEventListener('submit', saveHighScore);
+
+function saveHighScore(event) {
+    event.preventDefault();
+    const initials = document.getElementById('initials').value;
+    const finalScore = document.getElementById('final-score').textContent;
+    const highscore = {
+        score: finalScore,
+        initials: initials
+    };
+
+    let highscores = JSON.parse(localStorage.getItem('highscores')) || [];
+    highscores.push(highscore);
+    localStorage.setItem('highscores', JSON.stringify(highscores));
+
+    displayHighScores();
 }
