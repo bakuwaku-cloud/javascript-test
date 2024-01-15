@@ -86,19 +86,6 @@ main p {
     color: white;
 }
 
-.btn:hover {
-    background: blue;
-    color: white;
-}
-
-.correct {
-    background-color: green;
-}
-
-.wrong {
-    background-color: red;
-}
-
 .hide {
     display: none;
 }
