@@ -182,7 +182,7 @@ function displayHighScores() {
         li.textContent = `${highscore.initials} - ${highscore.score}`;
         highScoresList.appendChild(li);
     });
-
+    document.getElementById('quiz-intro').classList.add('hide');
     document.getElementById('end-screen').classList.add('hide');
     document.getElementById('high-scores').classList.remove('hide');
 }

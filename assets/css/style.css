@@ -100,6 +100,15 @@ main p {
 
 .button-list li button {
     width: 100%; 
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: purple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-right: 5px; 
 }
 
 .hide {
@@ -145,4 +154,28 @@ main p {
     padding: 10px;
     margin-bottom: 5px; 
     border-radius: 5px;
+}
+
+#go-back button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: purple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-right: 5px; 
+}
+
+#clear-highscores button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: purple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-right: 5px; 
 }
