@@ -82,6 +82,13 @@ const questions = [
     },
 ];
 
+function resetState() {
+    let children = Array.from(answerButtonsElement.children);
+    for (let i = 0; i < children.length; i++) {
+        answerButtonsElement.removeChild(children[i]);
+    }
+}
+
 function showQuestion(question) {
     resetState(); 
     questionElement.innerText = question.question; 
