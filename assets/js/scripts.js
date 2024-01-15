@@ -103,3 +103,23 @@ function showQuestion(question) {
         answerButtonsElement.appendChild(button); 
     });
 }
+
+function selectAnswer(e) {
+    const selectedButton = e.target;
+    const correct = selectedButton.dataset.correct === 'true';
+
+    if (!correct) {
+        timeLeft -= 10; 
+        if (timeLeft < 0) {
+            timeLeft = 0;
+        }
+        timerElement.textContent = timeLeft;
+    }
+
+    if (shuffledQuestions.length > currentQuestionIndex + 1) {
+        currentQuestionIndex++;
+        setNextQuestion();
+    } else {
+        endGame();
+    }
+}
