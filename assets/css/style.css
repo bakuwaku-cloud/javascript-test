@@ -102,3 +102,15 @@ main p {
     margin-top: 1rem;
     text-align: center;
 }
+
+#end-screen {
+    text-align: center;
+}
+
+#highscore-form {
+    margin-top: 20px;
+}
+
+#highscore-form input {
+    margin-right: 10px;
+}
