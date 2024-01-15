@@ -58,3 +58,46 @@ main p {
 #start-quiz:hover {
     background: #0056b3;
 }
+
+#question-container {
+    display: none; 
+    flex-direction: column;
+    align-items: start;
+}
+
+#question {
+    margin-bottom: 1rem;
+}
+
+.btn-grid {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 10px;
+}
+
+.btn {
+    background: #ffffff;
+    border: 1px solid #dcdcdc;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #f3f3f3;
+}
+
+.correct {
+    background-color: limegreen;
+}
+
+.wrong {
+    background-color: red;
+}
+
+.hide {
+    display: none !important;
+}
+
+.show {
+    display: block !important;
+}
