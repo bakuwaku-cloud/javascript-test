@@ -9,27 +9,10 @@ body {
     background-color: #f4f4f4;
 }
 
-#quiz-container {
-    width: 600px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-}
-
 header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
-}
-
-#view-highscores {
-    color: purple;
-    text-decoration: none;
-}
-
-#timer {
-    font-weight: bold;
 }
 
 main h1 {
@@ -42,34 +25,8 @@ main p {
     line-height: 1.6;
 }
 
-#start-quiz {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background: purple;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-#start-quiz:hover {
-    background: blue;
-}
-
-#question-container {
-    flex-direction: column;
-    align-items: start;
-}
-
-#question {
-    margin-bottom: 1rem;
-}
-
-#question h2 {
-    margin-bottom: 1rem;
+.hide {
+    display: none;
 }
 
 .button {
@@ -111,8 +68,13 @@ main p {
     margin-right: 5px; 
 }
 
-.hide {
-    display: none;
+#view-highscores {
+    color: purple;
+    text-decoration: none;
+}
+
+#timer {
+    font-weight: bold;
 }
 
 .feedback {
@@ -121,6 +83,45 @@ main p {
     height: 2rem; 
     margin-top: 1rem;
     text-align: center;
+}
+
+
+#quiz-container {
+    width: 600px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+#start-quiz {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: purple;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#start-quiz:hover {
+    background: blue;
+}
+
+#question-container {
+    flex-direction: column;
+    align-items: start;
+}
+
+#question {
+    margin-bottom: 1rem;
+}
+
+#question h2 {
+    margin-bottom: 1rem;
 }
 
 #end-screen {
@@ -154,28 +155,4 @@ main p {
     padding: 10px;
     margin-bottom: 5px; 
     border-radius: 5px;
-}
-
-#go-back button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    background-color: purple;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    margin-right: 5px; 
-}
-
-#clear-highscores button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    background-color: purple;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    margin-right: 5px; 
 }

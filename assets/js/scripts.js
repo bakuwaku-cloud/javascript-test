@@ -107,7 +107,7 @@ function showQuestion(question) {
         const li = document.createElement('li');
         const button = document.createElement('button');
         button.innerText = answer.text;
-        button.classList.add('btn');
+        button.classList.add('button');
         if (answer.correct) {
             button.dataset.correct = answer.correct;
         }
