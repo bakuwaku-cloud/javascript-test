@@ -27,10 +27,6 @@ main p {
     line-height: 1.6;
 }
 
-.hide {
-    display: none;
-}
-
 .button {
     margin-top: 5px;
     padding: 10px 20px;

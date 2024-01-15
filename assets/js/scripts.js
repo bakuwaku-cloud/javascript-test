@@ -1,40 +1,20 @@
-const startButton = document.getElementById('start-quiz');
-const timerElement = document.getElementById('time');
-const quizIntro = document.getElementById('quiz-intro');
-const questionContainer = document.getElementById('question-container');
-const questionElement = document.getElementById('question');
-const answerButtonsElement = document.getElementById('answer-buttons');
-let score = 0; 
+const domRefs = {
+    startButton: document.getElementById('start-quiz'),
+    timerElement: document.getElementById('timer'),
+    highscoresLink: document.getElementById('view-highscores'),
+    quizIntro: document.getElementById('quiz-intro'),
+    questionContainer: document.getElementById('question-container'),
+    questionElement: document.getElementById('question'),
+    answerButtons: document.getElementById('answer-buttons'),
+    feedbackElement: document.getElementById('feedback'),
+};
 
-toggleTimer(false);
-
-function startGame() {
-    toggleHighscoresLink(false);
-    toggleTimer(true);
-    startButton.classList.add('hide');
-    quizIntro.classList.add('hide');
-    questionContainer.classList.remove('hide');
-    score = 0;
-
-    shuffledQuestions = questions.sort(() => Math.random() - .5);
-    currentQuestionIndex = 0;
-    timeLeft = 60; // initialize the time left for the quiz
-    timerElement.textContent = timeLeft; // display the time left in the timer element
-
-    // start the timer countdown
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        timerElement.textContent = timeLeft;
-
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            endGame(); 
-        }
-    }, 1000);
-
-    questionContainer.classList.remove('hide');
-    setNextQuestion(); 
-}
+const state = {
+    score: 0,
+    currentQuestionIndex: 0,
+    shuffledQuestions: [],
+    timerInterval: null,
+  };
 
 const questions = [
     {
@@ -89,77 +69,100 @@ const questions = [
     },
 ];
 
-function resetState() {
-    let children = Array.from(answerButtonsElement.children);
-    for (let i = 0; i < children.length; i++) {
-        answerButtonsElement.removeChild(children[i]);
+function toggleVisibility(element, show) {
+    element.style.display = show ? 'block' : 'none';
+}
+
+function startTimer() {
+    state.timeLeft = 60;
+    domRefs.timerElement.textContent = state.timeLeft;
+    toggleVisibility(domRefs.timerElement, true);
+    state.timerInterval = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+    state.timeLeft--;
+    domRefs.timerElement.textContent = state.timeLeft;
+    if (state.timeLeft <= 0) {
+        clearInterval(state.timerInterval);
+        endGame();
     }
 }
 
-function setNextQuestion() {
-    console.log("Setting next question"); 
-    showQuestion(shuffledQuestions[currentQuestionIndex]);
+function initializeQuiz() {
+    toggleVisibility(highscoresLink, true);
+    toggleVisibility(timerElement, false);
+    shuffledQuestions = shuffleQuestions(questions);
+    bindEventListeners();
 }
 
-function showQuestion(question) {
-    resetState(); 
-    questionElement.innerHTML = ''; 
-    const questionTitle = document.createElement('h2');
-    questionTitle.textContent = question.question;
-    questionElement.appendChild(questionTitle); 
-    question.answers.forEach(answer => {
-        const li = document.createElement('li');
-        const button = document.createElement('button');
-        button.innerText = answer.text;
-        button.classList.add('button');
-        if (answer.correct) {
-            button.dataset.correct = answer.correct;
+function bindEventListeners() {
+    startButton.addEventListener('click', startGame);
+    document.getElementById('highscore-form').addEventListener('submit', saveHighScore);
+    document.getElementById('clear-highscores').addEventListener('click', clearHighScores);
+    document.getElementById('go-back').addEventListener('click', goBack);
+    document.getElementById('view-highscores').addEventListener('click', displayHighScores);
+    answerButtons.addEventListener('click', function(event) {
+        if (event.target.tagName === 'BUTTON') {
+            selectAnswer(event);
         }
-        button.addEventListener('click', selectAnswer);
-        li.appendChild(button); 
-        answerButtonsElement.appendChild(li); 
     });
 }
 
-function selectAnswer(e) {
-    const selectedButton = e.target;
-    const correct = selectedButton.dataset.correct === 'true';
-    const feedbackElement = document.getElementById('feedback');
 
-    if (correct) {
-        feedbackElement.textContent = 'Correct!';
-        score += 20;
-    } else {
-        feedbackElement.textContent = 'Wrong!';
-        timeLeft -= 10;
-        if (timeLeft < 0) {
-            timeLeft = 0;
-        }
+function startGame() {
+    toggleVisibility(startButton, false);
+    toggleVisibility(quizIntro, false);
+    toggleVisibility(questionContainer, true);
+
+    score = 0;
+    currentQuestionIndex = 0;
+    shuffledQuestions = shuffleQuestions(questions); 
+
+    startTimer();
+
+    setNextQuestion();
+}
+
+function startTimer() {
+    timeLeft = 60;
+    timerElement.textContent = timeLeft;
+    toggleVisibility(timerElement, true); 
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
         timerElement.textContent = timeLeft;
-        score = Math.max(0, score - 10);
-    }
-    setTimeout(() => {
-        if (shuffledQuestions.length > currentQuestionIndex + 1) {
-            currentQuestionIndex++;
-            setNextQuestion();
-        } else {
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
             endGame();
         }
-        feedbackElement.textContent = '';
     }, 1000);
 }
 
-startButton.addEventListener('click', startGame);
-
 function endGame() {
-    toggleTimer(false);
     clearInterval(timerInterval);
-    document.getElementById('final-score').textContent = score; 
-    questionContainer.classList.add('hide');
-    document.getElementById('end-screen').classList.remove('hide');
+    toggleVisibility(timerElement, false);
+    document.getElementById('final-score').textContent = score;
+    toggleVisibility(document.getElementById('end-screen'), true);
 }
 
-document.getElementById('highscore-form').addEventListener('submit', saveHighScore);
+function displayHighScores() {
+    toggleVisibility(quizIntro, false);
+    toggleVisibility(document.getElementById('end-screen'), false);
+    toggleVisibility(document.getElementById('high-scores'), true);
+
+    let highscores = JSON.parse(localStorage.getItem('highscores')) || [];
+    highscores.sort((a, b) => b.score - a.score);
+
+    const highScoresList = document.getElementById('high-scores-list');
+    clearElement(highScoresList); 
+    highscores.forEach(highscore => {
+        const li = document.createElement('li');
+        li.textContent = `${highscore.initials} - ${highscore.score}`;
+        highScoresList.appendChild(li);
+    });
+}
 
 function saveHighScore(event) {
     event.preventDefault();
@@ -177,66 +180,98 @@ function saveHighScore(event) {
     displayHighScores();
 }
 
-function displayHighScores() {
-    toggleHighscoresLink(false);
-    toggleTimer(false);
-    let highscores = JSON.parse(localStorage.getItem('highscores')) || [];
-    highscores.sort((a, b) => b.score - a.score); 
-    const highScoresList = document.getElementById('high-scores-list');
-    highScoresList.innerHTML = ''; 
-    highscores.forEach(highscore => {
-        const li = document.createElement('li');
-        li.textContent = `${highscore.initials} - ${highscore.score}`;
-        highScoresList.appendChild(li);
-    });
-    document.getElementById('quiz-intro').classList.add('hide');
-    document.getElementById('end-screen').classList.add('hide');
-    document.getElementById('high-scores').classList.remove('hide');
+function goBack() {
+    toggleVisibility(document.getElementById('high-scores'), false);
+    toggleVisibility(quizIntro, true);
+    toggleVisibility(highscoresLink, true);
+    toggleVisibility(timerElement, false);
+    resetQuiz();
 }
 
-document.getElementById('clear-highscores').addEventListener('click', clearHighScores);
+function resetQuiz() {
+    score = 0;
+    currentQuestionIndex = 0;
+    shuffledQuestions = shuffleQuestions(questions);
+    clearElement(answerButtons);
+}
 
 function clearHighScores() {
     localStorage.removeItem('highscores');
-    const highScoresList = document.getElementById('high-scores-list');
-    highScoresList.innerHTML = '';
+    displayHighScores();
 }
 
-document.getElementById('go-back').addEventListener('click', goBack);
-
-function goBack() {
-    document.getElementById('high-scores').classList.add('hide');
-    document.getElementById('quiz-intro').classList.remove('hide');
-    toggleHighscoresLink(true);
-    toggleTimer(false);
+function createButton(text, correct) {
+    const button = document.createElement('button');
+    button.innerText = text;
+    button.classList.add('button');
+if (correct) {
+button.dataset.correct = true;
+}
+return button;
 }
 
-document.getElementById('view-highscores').addEventListener('click', function(event) {
-    event.preventDefault(); 
-    displayHighScores(); 
-});
+function createQuestionListItem(answer) {
+const li = document.createElement('li');
+const button = createButton(answer.text, answer.correct);
+button.addEventListener('click', selectAnswer);
+li.appendChild(button);
+return li;
+}
 
-function toggleHighscoresLink(display) {
-    const highscoresLink = document.getElementById('view-highscores');
-    const placeholder = document.querySelector('.placeholder');
-
-    if (display) {
-        highscoresLink.style.display = 'block';
-        placeholder.style.visibility = 'hidden'; 
-    } else {
-        highscoresLink.style.display = 'none';
-        placeholder.style.visibility = 'visible'; 
+function resetState() {
+    let children = Array.from(answerButtons.children);
+    for (let i = 0; i < children.length; i++) {
+        answerButtons.removeChild(children[i]);
     }
 }
 
-function toggleTimer(display) {
-    const timerDisplay = document.getElementById('timer');
-    timerDisplay.style.display = display ? 'block' : 'none';
+function setNextQuestion() {
+    console.log("Setting next question"); 
+    showQuestion(shuffledQuestions[currentQuestionIndex]);
 }
 
-// todo: fix button conflict in view highscores (styles are not appearing)
-// todo: hide quiz-intro when i click "view high scores"
-// todo: remove header when i click "view high scores"
-// todo: view-highscores should not appear during quiz
-// todo: timer should only appear during quiz
-// todo: make timer sit on the right side
+function showQuestion(question) {
+    resetState();
+    questionElement.textContent = question.question;
+    question.answers.map(createQuestionListItem).forEach(li => answerButtons.appendChild(li));
+}
+
+function clearElement(element) {
+    while (element.firstChild) {
+    element.removeChild(element.firstChild);
+    }
+}
+
+function selectAnswer(event) {
+    const selectedButton = event.target;
+    const correct = selectedButton.dataset.correct;
+    updateScore(correct);
+    showFeedback(correct);
+    nextQuestion();
+}
+
+function updateScore(correct) {
+    if (correct) {
+        score += 20;
+    } else {
+        timeLeft = Math.max(0, timeLeft - 10);
+        timerElement.textContent = timeLeft;
+        score = Math.max(0, score - 10);
+    }
+}
+
+function showFeedback(correct) {
+    feedbackElement.textContent = correct ? 'Correct!' : 'Wrong!';
+    setTimeout(() => feedbackElement.textContent = '', 1000);
+}
+
+function queueNextQuestion() {
+    if (currentQuestionIndex < shuffledQuestions.length - 1) {
+        currentQuestionIndex++;
+        setNextQuestion();
+    } else {
+        endGame();
+    }
+}
+
+initializeQuiz();
