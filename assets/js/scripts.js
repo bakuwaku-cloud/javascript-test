@@ -1,4 +1,5 @@
 const startButton = document.getElementById('start-quiz');
+const timerElement = document.getElementById('time');
 const quizIntro = document.getElementById('quiz-intro');
 const questionContainer = document.getElementById('question-container');
 const questionElement = document.getElementById('question');
