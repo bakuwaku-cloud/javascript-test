@@ -114,3 +114,40 @@ main p {
 #highscore-form input {
     margin-right: 10px;
 }
+
+#high-scores {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#high-scores h2 {
+    margin-bottom: 20px;
+}
+
+#high-scores-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#high-scores-list li {
+    background-color: #f3f3f3;
+    padding: 10px;
+    margin-bottom: 5px; 
+    border-radius: 5px;
+}
+
+#go-back, #clear-highscores {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: purple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-right: 5px; 
+}
+
+#go-back:hover, #clear-highscores:hover {
+    background-color: blue;
+}
