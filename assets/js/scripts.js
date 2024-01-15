@@ -7,6 +7,8 @@ const answerButtonsElement = document.getElementById('answer-buttons');
 let score = 0; 
 
 function startGame() {
+    toggleHighscoresLink(false);
+    toggleTimer(true);
     startButton.classList.add('hide');
     quizIntro.classList.add('hide');
     questionContainer.classList.remove('hide');
@@ -148,6 +150,7 @@ function selectAnswer(e) {
 startButton.addEventListener('click', startGame);
 
 function endGame() {
+    toggleTimer(false);
     clearInterval(timerInterval);
     document.getElementById('final-score').textContent = score; 
     questionContainer.classList.add('hide');
@@ -173,6 +176,8 @@ function saveHighScore(event) {
 }
 
 function displayHighScores() {
+    toggleHighscoresLink(false);
+    toggleTimer(false);
     let highscores = JSON.parse(localStorage.getItem('highscores')) || [];
     highscores.sort((a, b) => b.score - a.score); 
     const highScoresList = document.getElementById('high-scores-list');
@@ -200,12 +205,32 @@ document.getElementById('go-back').addEventListener('click', goBack);
 function goBack() {
     document.getElementById('high-scores').classList.add('hide');
     document.getElementById('quiz-intro').classList.remove('hide');
+    toggleHighscoresLink(true);
+    toggleTimer(false);
 }
 
 document.getElementById('view-highscores').addEventListener('click', function(event) {
     event.preventDefault(); 
     displayHighScores(); 
 });
+
+function toggleHighscoresLink(display) {
+    const highscoresLink = document.getElementById('view-highscores');
+    if (display) {
+        highscoresLink.style.display = 'block';
+    } else {
+        highscoresLink.style.display = 'none';
+    }
+}
+
+function toggleTimer(display) {
+    const timerDisplay = document.getElementById('timer');
+    if (display) {
+        timerDisplay.style.display = 'block'; 
+    } else {
+        timerDisplay.style.display = 'none';
+    }
+}
 
 // todo: fix button conflict in view highscores (styles are not appearing)
 // todo: hide quiz-intro when i click "view high scores"
