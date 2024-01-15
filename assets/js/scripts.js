@@ -123,3 +123,5 @@ function selectAnswer(e) {
         endGame();
     }
 }
+
+startButton.addEventListener('click', startGame);
