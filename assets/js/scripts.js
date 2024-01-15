@@ -9,7 +9,9 @@ const state = {
 const domRefs = {
     startButton: document.getElementById('start-quiz'),
     highscoresLink: document.getElementById('view-highscores'),
+    placeholder: document.getElementById('placeholder'),
     timerElement: document.getElementById('timer'),
+    timeSpan: document.getElementById('time'),
     quizIntro: document.getElementById('quiz-intro'),
     questionContainer: document.getElementById('question-container'),
     questionElement: document.getElementById('question'),
@@ -83,19 +85,27 @@ const questions = [
 
 // helper functions
 function toggleVisibility(element, show) {
-    element.style.display = show ? 'block' : 'none';
+    if (show) {
+        element.style.display = 'block'; // or 'flex', 'inline-block', etc., depending on your layout
+        Array.from(element.children).forEach(child => {
+            child.style.display = ''; // Remove the display style to allow default or CSS styling
+        });
+    } else {
+        element.style.display = 'none';
+    }
 }
+
 
 function startTimer() {
     state.timeLeft = 60;
-    domRefs.timerElement.textContent = state.timeLeft;
+    domRefs.timeSpan.textContent = state.timeLeft;
     toggleVisibility(domRefs.timerElement, true);
     state.timerInterval = setInterval(updateTimer, 1000);
 }
 
 function updateTimer() {
     state.timeLeft--;
-    domRefs.timerElement.textContent = state.timeLeft;
+    domRefs.timeSpan.textContent = state.timeLeft;
     if (state.timeLeft <= 0) {
         clearInterval(state.timerInterval);
         endGame();
@@ -190,14 +200,16 @@ function initializeQuiz() {
     toggleVisibility(domRefs.highscoresLink, true);
     bindClick();
     shuffledQuestions = shuffleQuestions(questions);
-    displayHighScores();
 }
 
 // start & end functions
 function startGame() {
-    toggleVisibility(domRefs.startButton, false);
     toggleVisibility(domRefs.quizIntro, false);
     toggleVisibility(domRefs.questionContainer, true);
+
+    toggleVisibility(domRefs.highscoresLink, false);
+    toggleVisibility(domRefs.placeholder, true);
+    toggleVisibility(domRefs.timerElement, true);
 
     score = 0;
     currentQuestionIndex = 0;
@@ -218,7 +230,10 @@ function endGame() {
 // question functions
 function showQuestion(question) {
     resetState();
-    domRefs.questionElement.textContent = question.question; 
+    const questionTitle = document.createElement('h2');
+    questionTitle.textContent = question.question;
+    clearElement(domRefs.questionElement);
+    domRefs.questionElement.appendChild(questionTitle);
     question.answers.map(createQuestionListItem).forEach(li => domRefs.answerButtons.appendChild(li));
 }
 
