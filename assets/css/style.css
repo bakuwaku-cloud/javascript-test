@@ -72,6 +72,7 @@ main p {
 }
 
 #timer {
+    display: none;
     font-weight: bold;
 }
 

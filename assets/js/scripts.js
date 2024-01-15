@@ -225,11 +225,7 @@ function toggleHighscoresLink(display) {
 
 function toggleTimer(display) {
     const timerDisplay = document.getElementById('timer');
-    if (display) {
-        timerDisplay.style.display = 'block'; 
-    } else {
-        timerDisplay.style.display = 'none';
-    }
+    timerDisplay.style.display = display ? 'block' : 'none';
 }
 
 // todo: fix button conflict in view highscores (styles are not appearing)
