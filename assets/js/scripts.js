@@ -1,3 +1,5 @@
+const startButton = document.getElementById('start-quiz');
+
 const questions = [
     {
         question:
