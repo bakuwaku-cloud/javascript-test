@@ -8,6 +8,7 @@ const answerButtonsElement = document.getElementById('answer-buttons');
 function startGame() {
     startButton.classList.add('hide');
     quizIntro.classList.add('hide');
+    questionContainer.classList.remove('hide');
 
     shuffledQuestions = questions.sort(() => Math.random() - .5);
     currentQuestionIndex = 0;
