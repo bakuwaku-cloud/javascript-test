@@ -130,7 +130,7 @@ function selectAnswer(e) {
             timeLeft = 0;
         }
         timerElement.textContent = timeLeft;
-        score -= 10;
+        score = Math.max(0, score - 10);
     }
     setTimeout(() => {
         if (shuffledQuestions.length > currentQuestionIndex + 1) {
