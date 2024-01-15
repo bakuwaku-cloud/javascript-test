@@ -89,6 +89,11 @@ function resetState() {
     }
 }
 
+function setNextQuestion() {
+    console.log("Setting next question"); 
+    showQuestion(shuffledQuestions[currentQuestionIndex]);
+}
+
 function showQuestion(question) {
     resetState(); 
     questionElement.innerText = question.question; 
