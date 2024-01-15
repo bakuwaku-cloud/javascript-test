@@ -104,6 +104,7 @@ function showQuestion(question) {
     questionTitle.textContent = question.question;
     questionElement.appendChild(questionTitle); 
     question.answers.forEach(answer => {
+        const li = document.createElement('li');
         const button = document.createElement('button');
         button.innerText = answer.text;
         button.classList.add('btn');
@@ -111,7 +112,8 @@ function showQuestion(question) {
             button.dataset.correct = answer.correct;
         }
         button.addEventListener('click', selectAnswer);
-        answerButtonsElement.appendChild(button); 
+        li.appendChild(button); 
+        answerButtonsElement.appendChild(li); 
     });
 }
 
@@ -188,10 +190,7 @@ function displayHighScores() {
 document.getElementById('clear-highscores').addEventListener('click', clearHighScores);
 
 function clearHighScores() {
-    // Clear high scores from local storage
     localStorage.removeItem('highscores');
-    
-    // Clear the high scores list in the DOM
     const highScoresList = document.getElementById('high-scores-list');
     highScoresList.innerHTML = '';
 }
@@ -207,3 +206,9 @@ document.getElementById('view-highscores').addEventListener('click', function(ev
     event.preventDefault(); 
     displayHighScores(); 
 });
+
+// todo: fix button conflict in view highscores (styles are not appearing)
+// todo: hide quiz-intro when i click "view high scores"
+// todo: remove header when i click "view high scores"
+// todo: view-highscores should not appear during quiz
+// todo: timer should only appear during quiz
