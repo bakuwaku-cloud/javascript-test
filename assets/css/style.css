@@ -96,7 +96,6 @@ main p {
 }
 
 #start-quiz {
-    display: block;
     width: 100%;
     padding: 10px;
     background: purple;

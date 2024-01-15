@@ -2,7 +2,6 @@
 const state = {
     score: 0,
     currentQuestionIndex: 0,
-    shuffledQuestions: [],
     timerInterval: null,
 };
 
@@ -18,7 +17,7 @@ const domRefs = {
     feedbackElement: document.getElementById('feedback'),
     endScreen: document.getElementById('end-screen'),
     highScoreForm: document.getElementById('highscore-form'),
-    initials: document.getElementById('initials'),
+    initialsInput: document.getElementById('initials'),
     submitButton: document.getElementById('submit'),
     finalScoreElement: document.getElementById('final-score'),
     initialsInput: document.getElementById('initials'),
@@ -137,10 +136,19 @@ function clearElement(element) {
 }
 
 function resetState() {
-    let children = Array.from(answerButtons.children);
+    let children = Array.from(domRefs.answerButtons.children);
     for (let i = 0; i < children.length; i++) {
-        answerButtons.removeChild(children[i]);
+        domRefs.answerButtons.removeChild(children[i]);
     }
+}
+
+function shuffleQuestions(questionsArray) {
+    const array = questionsArray.slice();
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; 
+    }
+    return array;
 }
 
 function updateScore(correct) {
@@ -157,7 +165,7 @@ function resetQuiz() {
     score = 0;
     currentQuestionIndex = 0;
     shuffledQuestions = shuffleQuestions(questions);
-    clearElement(answerButtons);
+    clearElement(domRefs.answerButtons);
 }
 
 function showFeedback(correct) {
@@ -166,12 +174,22 @@ function showFeedback(correct) {
 }
 
 // initializing
+function initializeElementVisibility() {
+    Object.values(domRefs).forEach(element => {
+        if (element) {
+            element.style.display = 'none';
+        }
+    });
+}
+
+// todo: fix visual bug where h2 from high score is appending and not appending the quiz-intro container
+
 function initializeQuiz() {
-    toggleVisibility(domRefs.timerElement, false);
-    toggleVisibility(domRefs.endScreen, false);
-    toggleVisibility(domRefs.highScoresElement, false);
+    initializeElementVisibility();
+    toggleVisibility(domRefs.quizIntro, true);
+    toggleVisibility(domRefs.highscoresLink, true);
     bindClick();
-    state.shuffledQuestions = shuffleQuestions(questions);
+    shuffledQuestions = shuffleQuestions(questions);
     displayHighScores();
 }
 
@@ -192,16 +210,16 @@ function startGame() {
 
 function endGame() {
     clearInterval(timerInterval);
-    toggleVisibility(timerElement, false);
-    document.getElementById('final-score').textContent = score;
+    toggleVisibility(domRefs.timerElement, false);
+    domRefs.finalScoreElement.textContent = score;
     toggleVisibility(document.getElementById('end-screen'), true);
 }
 
 // question functions
 function showQuestion(question) {
     resetState();
-    questionElement.textContent = question.question;
-    question.answers.map(createQuestionListItem).forEach(li => answerButtons.appendChild(li));
+    domRefs.questionElement.textContent = question.question; 
+    question.answers.map(createQuestionListItem).forEach(li => domRefs.answerButtons.appendChild(li));
 }
 
 function setNextQuestion() {
@@ -228,9 +246,9 @@ function selectAnswer(event) {
 
 // high score functions
 function displayHighScores() {
-    toggleVisibility(quizIntro, false);
-    toggleVisibility(document.getElementById('end-screen'), false);
-    toggleVisibility(document.getElementById('high-scores'), true);
+    toggleVisibility(domRefs.quizIntro, false);
+    toggleVisibility(domRefs.endScreen, false);
+    toggleVisibility(domRefs.highScoresElement, true);
 
     let highscores = JSON.parse(localStorage.getItem('highscores')) || [];
     highscores.sort((a, b) => b.score - a.score);
@@ -246,8 +264,8 @@ function displayHighScores() {
 
 function saveHighScore(event) {
     event.preventDefault();
-    const initials = document.getElementById('initials').value;
-    const finalScore = document.getElementById('final-score').textContent;
+    const initials = domRefs.initialsInput.value;
+    const finalScore = domRefs.finalScoreElement.textContent;
     const highscore = {
         score: finalScore,
         initials: initials
@@ -261,10 +279,10 @@ function saveHighScore(event) {
 }
 
 function goBack() {
-    toggleVisibility(document.getElementById('high-scores'), false);
-    toggleVisibility(quizIntro, true);
-    toggleVisibility(highscoresLink, true);
-    toggleVisibility(timerElement, false);
+    toggleVisibility(domRefs.highScoresElement, false);
+    toggleVisibility(domRefs.quizIntro, true);
+    toggleVisibility(domRefs.highscoresLink, true);
+    toggleVisibility(domRefs.timerElement, false);
     resetQuiz();
 }
 
