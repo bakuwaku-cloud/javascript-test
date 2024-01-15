@@ -97,7 +97,10 @@ function setNextQuestion() {
 
 function showQuestion(question) {
     resetState(); 
-    questionElement.innerText = question.question; 
+    questionElement.innerHTML = ''; 
+    const questionTitle = document.createElement('h2');
+    questionTitle.textContent = question.question;
+    questionElement.appendChild(questionTitle); 
     question.answers.forEach(answer => {
         const button = document.createElement('button');
         button.innerText = answer.text;
