@@ -5,6 +5,30 @@ const questionContainer = document.getElementById('question-container');
 const questionElement = document.getElementById('question');
 const answerButtonsElement = document.getElementById('answer-buttons');
 
+function startGame() {
+    startButton.classList.add('hide');
+    quizIntro.classList.add('hide');
+
+    shuffledQuestions = questions.sort(() => Math.random() - .5);
+    currentQuestionIndex = 0;
+    timeLeft = 60; // initialize the time left for the quiz
+    timerElement.textContent = timeLeft; // display the time left in the timer element
+
+    // start the timer countdown
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            endGame(); 
+        }
+    }, 1000);
+
+    questionContainer.classList.remove('hide');
+    setNextQuestion(); 
+}
+
 const questions = [
     {
         question:
@@ -57,3 +81,4 @@ const questions = [
         ],
     },
 ];
+
