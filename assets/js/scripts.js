@@ -1,20 +1,27 @@
-const domRefs = {
-    startButton: document.getElementById('start-quiz'),
-    timerElement: document.getElementById('timer'),
-    highscoresLink: document.getElementById('view-highscores'),
-    quizIntro: document.getElementById('quiz-intro'),
-    questionContainer: document.getElementById('question-container'),
-    questionElement: document.getElementById('question'),
-    answerButtons: document.getElementById('answer-buttons'),
-    feedbackElement: document.getElementById('feedback'),
-};
-
 const state = {
     score: 0,
     currentQuestionIndex: 0,
     shuffledQuestions: [],
     timerInterval: null,
-  };
+};
+
+const domRefs = {
+    startButton: document.getElementById('start-quiz'),
+    highscoresLink: document.getElementById('view-highscores'),
+    timerElement: document.getElementById('timer'),
+    quizIntro: document.getElementById('quiz-intro'),
+    questionContainer: document.getElementById('question-container'),
+    questionElement: document.getElementById('question'),
+    answerButtons: document.getElementById('answer-buttons'),
+    feedbackElement: document.getElementById('feedback'),
+    endScreen: document.getElementById('end-screen'),
+    finalScoreElement: document.getElementById('final-score'),
+    initialsInput: document.getElementById('initials'),
+    highScoresElement: document.getElementById('high-scores'),
+    highScoresList: document.getElementById('high-scores-list'),
+    goBackButton: document.getElementById('go-back'),
+    clearHighScoresButton: document.getElementById('clear-highscores'),
+};
 
 const questions = [
     {
@@ -90,10 +97,12 @@ function updateTimer() {
 }
 
 function initializeQuiz() {
-    toggleVisibility(highscoresLink, true);
-    toggleVisibility(timerElement, false);
-    shuffledQuestions = shuffleQuestions(questions);
+    toggleVisibility(domRefs.timerElement, false);
+    toggleVisibility(domRefs.endScreen, false);
+    toggleVisibility(domRefs.highScoresElement, false);
     bindEventListeners();
+    state.shuffledQuestions = shuffleQuestions(questions);
+    displayHighScores();
 }
 
 function bindEventListeners() {
@@ -109,7 +118,6 @@ function bindEventListeners() {
     });
 }
 
-
 function startGame() {
     toggleVisibility(startButton, false);
     toggleVisibility(quizIntro, false);
@@ -122,22 +130,6 @@ function startGame() {
     startTimer();
 
     setNextQuestion();
-}
-
-function startTimer() {
-    timeLeft = 60;
-    timerElement.textContent = timeLeft;
-    toggleVisibility(timerElement, true); 
-
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        timerElement.textContent = timeLeft;
-
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            endGame();
-        }
-    }, 1000);
 }
 
 function endGame() {
