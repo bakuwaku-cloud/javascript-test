@@ -6,6 +6,8 @@ const questionElement = document.getElementById('question');
 const answerButtonsElement = document.getElementById('answer-buttons');
 let score = 0; 
 
+toggleTimer(false);
+
 function startGame() {
     toggleHighscoresLink(false);
     toggleTimer(true);
@@ -216,10 +218,14 @@ document.getElementById('view-highscores').addEventListener('click', function(ev
 
 function toggleHighscoresLink(display) {
     const highscoresLink = document.getElementById('view-highscores');
+    const placeholder = document.querySelector('.placeholder');
+
     if (display) {
         highscoresLink.style.display = 'block';
+        placeholder.style.visibility = 'hidden'; 
     } else {
         highscoresLink.style.display = 'none';
+        placeholder.style.visibility = 'visible'; 
     }
 }
 
@@ -233,3 +239,4 @@ function toggleTimer(display) {
 // todo: remove header when i click "view high scores"
 // todo: view-highscores should not appear during quiz
 // todo: timer should only appear during quiz
+// todo: make timer sit on the right side

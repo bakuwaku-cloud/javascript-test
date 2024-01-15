@@ -73,8 +73,12 @@ main p {
     text-decoration: none;
 }
 
+.placeholder {
+    flex-grow: 1; 
+    visibility: hidden;
+}
+
 #timer {
-    display: none;
     font-weight: bold;
 }
 
