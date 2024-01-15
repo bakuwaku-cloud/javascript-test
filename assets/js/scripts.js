@@ -181,10 +181,8 @@ function displayHighScores() {
         highScoresList.appendChild(li);
     });
 
-    document.getElementById('quiz-intro').classList.add('hide');
     document.getElementById('end-screen').classList.add('hide');
-    const highScoresElement = document.getElementById('high-scores');
-    highScoresElement.classList.remove('hide');
+    document.getElementById('high-scores').classList.remove('hide');
 }
 
 document.getElementById('clear-highscores').addEventListener('click', clearHighScores);
@@ -202,7 +200,7 @@ document.getElementById('go-back').addEventListener('click', goBack);
 
 function goBack() {
     document.getElementById('high-scores').classList.add('hide');
-    document.getElementById('quiz-container').classList.remove('hide');
+    document.getElementById('quiz-intro').classList.remove('hide');
 }
 
 document.getElementById('view-highscores').addEventListener('click', function(event) {
