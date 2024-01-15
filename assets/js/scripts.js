@@ -4,6 +4,7 @@ const quizIntro = document.getElementById('quiz-intro');
 const questionContainer = document.getElementById('question-container');
 const questionElement = document.getElementById('question');
 const answerButtonsElement = document.getElementById('answer-buttons');
+let score = 0; 
 
 function startGame() {
     startButton.classList.add('hide');
@@ -120,6 +121,7 @@ function selectAnswer(e) {
 
     if (correct) {
         feedbackElement.textContent = 'Correct!';
+        score += 20;
     } else {
         feedbackElement.textContent = 'Wrong!';
         timeLeft -= 10;
@@ -140,3 +142,12 @@ function selectAnswer(e) {
 }
 
 startButton.addEventListener('click', startGame);
+
+function endGame() {
+    clearInterval(timerInterval);
+    
+    const finalScore = timeLeft;
+    document.getElementById('final-score').textContent = finalScore;
+    questionContainer.classList.add('hide');
+    document.getElementById('end-screen').classList.remove('hide');
+}
