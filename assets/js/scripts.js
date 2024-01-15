@@ -147,9 +147,7 @@ startButton.addEventListener('click', startGame);
 
 function endGame() {
     clearInterval(timerInterval);
-    
-    const finalScore = timeLeft;
-    document.getElementById('final-score').textContent = finalScore;
+    document.getElementById('final-score').textContent = score; 
     questionContainer.classList.add('hide');
     document.getElementById('end-screen').classList.remove('hide');
 }
