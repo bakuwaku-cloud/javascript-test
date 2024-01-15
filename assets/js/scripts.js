@@ -186,3 +186,21 @@ function displayHighScores() {
     const highScoresElement = document.getElementById('high-scores');
     highScoresElement.classList.remove('hide');
 }
+
+document.getElementById('clear-highscores').addEventListener('click', clearHighScores);
+
+function clearHighScores() {
+    // Clear high scores from local storage
+    localStorage.removeItem('highscores');
+    
+    // Clear the high scores list in the DOM
+    const highScoresList = document.getElementById('high-scores-list');
+    highScoresList.innerHTML = '';
+}
+
+document.getElementById('go-back').addEventListener('click', goBack);
+
+function goBack() {
+    document.getElementById('high-scores').classList.add('hide');
+    document.getElementById('quiz-container').classList.remove('hide');
+}
