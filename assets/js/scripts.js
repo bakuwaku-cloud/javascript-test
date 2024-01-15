@@ -1,3 +1,4 @@
+// global states
 const state = {
     score: 0,
     currentQuestionIndex: 0,
@@ -5,6 +6,7 @@ const state = {
     timerInterval: null,
 };
 
+// dom elements
 const domRefs = {
     startButton: document.getElementById('start-quiz'),
     highscoresLink: document.getElementById('view-highscores'),
@@ -15,6 +17,9 @@ const domRefs = {
     answerButtons: document.getElementById('answer-buttons'),
     feedbackElement: document.getElementById('feedback'),
     endScreen: document.getElementById('end-screen'),
+    highScoreForm: document.getElementById('highscore-form'),
+    initials: document.getElementById('initials'),
+    submitButton: document.getElementByType('submit'),
     finalScoreElement: document.getElementById('final-score'),
     initialsInput: document.getElementById('initials'),
     highScoresElement: document.getElementById('high-scores'),
@@ -23,6 +28,7 @@ const domRefs = {
     clearHighScoresButton: document.getElementById('clear-highscores'),
 };
 
+// question array
 const questions = [
     {
         question:
@@ -76,6 +82,7 @@ const questions = [
     },
 ];
 
+// helper functions
 function toggleVisibility(element, show) {
     element.style.display = show ? 'block' : 'none';
 }
@@ -96,32 +103,83 @@ function updateTimer() {
     }
 }
 
+function bindClick() {
+    domRefs.highscoresLink.addEventListener('click', displayHighScores);
+    domRefs.startButton.addEventListener('click', startGame);
+    domRefs.answerButtons.addEventListener('click', selectAnswer);
+    domRefs.submitButton.addEventListener('click', saveHighScore);
+    domRefs.clearHighScoresButton.addEventListener('click', clearHighScores);
+    domRefs.goBackButton.addEventListener('click', goBack);
+}
+
+function createButton(text, correct) {
+    const button = document.createElement('button');
+    button.innerText = text;
+    button.classList.add('button');
+if (correct) {
+button.dataset.correct = true;
+}
+return button;
+}
+
+function createQuestionListItem(answer) {
+const li = document.createElement('li');
+const button = createButton(answer.text, answer.correct);
+button.addEventListener('click', selectAnswer);
+li.appendChild(button);
+return li;
+}
+
+function clearElement(element) {
+    while (element.firstChild) {
+    element.removeChild(element.firstChild);
+    }
+}
+
+function resetState() {
+    let children = Array.from(answerButtons.children);
+    for (let i = 0; i < children.length; i++) {
+        answerButtons.removeChild(children[i]);
+    }
+}
+
+function updateScore(correct) {
+    if (correct) {
+        score += 20;
+    } else {
+        timeLeft = Math.max(0, timeLeft - 10);
+        timerElement.textContent = timeLeft;
+        score = Math.max(0, score - 10);
+    }
+}
+
+function resetQuiz() {
+    score = 0;
+    currentQuestionIndex = 0;
+    shuffledQuestions = shuffleQuestions(questions);
+    clearElement(answerButtons);
+}
+
+function showFeedback(correct) {
+    feedbackElement.textContent = correct ? 'Correct!' : 'Wrong!';
+    setTimeout(() => feedbackElement.textContent = '', 1000);
+}
+
+// initializing
 function initializeQuiz() {
     toggleVisibility(domRefs.timerElement, false);
     toggleVisibility(domRefs.endScreen, false);
     toggleVisibility(domRefs.highScoresElement, false);
-    bindEventListeners();
+    bindClick();
     state.shuffledQuestions = shuffleQuestions(questions);
     displayHighScores();
 }
 
-function bindEventListeners() {
-    startButton.addEventListener('click', startGame);
-    document.getElementById('highscore-form').addEventListener('submit', saveHighScore);
-    document.getElementById('clear-highscores').addEventListener('click', clearHighScores);
-    document.getElementById('go-back').addEventListener('click', goBack);
-    document.getElementById('view-highscores').addEventListener('click', displayHighScores);
-    answerButtons.addEventListener('click', function(event) {
-        if (event.target.tagName === 'BUTTON') {
-            selectAnswer(event);
-        }
-    });
-}
-
+// start & end functions
 function startGame() {
-    toggleVisibility(startButton, false);
-    toggleVisibility(quizIntro, false);
-    toggleVisibility(questionContainer, true);
+    toggleVisibility(domRefs.startButton, false);
+    toggleVisibility(domRefs.quizIntro, false);
+    toggleVisibility(domRefs.questionContainer, true);
 
     score = 0;
     currentQuestionIndex = 0;
@@ -139,6 +197,36 @@ function endGame() {
     toggleVisibility(document.getElementById('end-screen'), true);
 }
 
+// question functions
+function showQuestion(question) {
+    resetState();
+    questionElement.textContent = question.question;
+    question.answers.map(createQuestionListItem).forEach(li => answerButtons.appendChild(li));
+}
+
+function setNextQuestion() {
+    console.log("Setting next question"); 
+    showQuestion(shuffledQuestions[currentQuestionIndex]);
+}
+
+function queueNextQuestion() {
+    if (currentQuestionIndex < shuffledQuestions.length - 1) {
+        currentQuestionIndex++;
+        setNextQuestion();
+    } else {
+        endGame();
+    }
+}
+
+function selectAnswer(event) {
+    const selectedButton = event.target;
+    const correct = selectedButton.dataset.correct;
+    updateScore(correct);
+    showFeedback(correct);
+    queueNextQuestion();
+}
+
+// high score functions
 function displayHighScores() {
     toggleVisibility(quizIntro, false);
     toggleVisibility(document.getElementById('end-screen'), false);
@@ -180,90 +268,9 @@ function goBack() {
     resetQuiz();
 }
 
-function resetQuiz() {
-    score = 0;
-    currentQuestionIndex = 0;
-    shuffledQuestions = shuffleQuestions(questions);
-    clearElement(answerButtons);
-}
-
 function clearHighScores() {
     localStorage.removeItem('highscores');
     displayHighScores();
-}
-
-function createButton(text, correct) {
-    const button = document.createElement('button');
-    button.innerText = text;
-    button.classList.add('button');
-if (correct) {
-button.dataset.correct = true;
-}
-return button;
-}
-
-function createQuestionListItem(answer) {
-const li = document.createElement('li');
-const button = createButton(answer.text, answer.correct);
-button.addEventListener('click', selectAnswer);
-li.appendChild(button);
-return li;
-}
-
-function resetState() {
-    let children = Array.from(answerButtons.children);
-    for (let i = 0; i < children.length; i++) {
-        answerButtons.removeChild(children[i]);
-    }
-}
-
-function setNextQuestion() {
-    console.log("Setting next question"); 
-    showQuestion(shuffledQuestions[currentQuestionIndex]);
-}
-
-function showQuestion(question) {
-    resetState();
-    questionElement.textContent = question.question;
-    question.answers.map(createQuestionListItem).forEach(li => answerButtons.appendChild(li));
-}
-
-function clearElement(element) {
-    while (element.firstChild) {
-    element.removeChild(element.firstChild);
-    }
-}
-
-function selectAnswer(event) {
-    const selectedButton = event.target;
-    const correct = selectedButton.dataset.correct;
-    updateScore(correct);
-    showFeedback(correct);
-    nextQuestion();
-}
-
-function updateScore(correct) {
-    if (correct) {
-        score += 20;
-    } else {
-        timeLeft = Math.max(0, timeLeft - 10);
-        timerElement.textContent = timeLeft;
-        score = Math.max(0, score - 10);
-    }
-}
-
-function showFeedback(correct) {
-    feedbackElement.textContent = correct ? 'Correct!' : 'Wrong!';
-    setTimeout(() => feedbackElement.textContent = '', 1000);
-}
-
-function queueNextQuestion() {
-    if (currentQuestionIndex < shuffledQuestions.length - 1) {
-        currentQuestionIndex++;
-        setNextQuestion();
-    } else {
-        endGame();
-    }
 }
 
 initializeQuiz();
