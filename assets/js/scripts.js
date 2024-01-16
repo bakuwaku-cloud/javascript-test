@@ -144,10 +144,10 @@ function createButton(text, correct) {
     const button = document.createElement('button');
     button.innerText = text;
     button.classList.add('button');
-if (correct) {
-button.dataset.correct = true;
-}
-return button;
+    if (correct) {
+        button.dataset.correct = true;
+    }
+    return button;
 }
 
 function createQuestionListItem(answer) {
@@ -243,13 +243,7 @@ function endGame() {
     toggleVisibility(domRefs.questionContainer, false);
     domRefs.finalScoreElement.textContent = state.score;
 
-    let newSubmitButton = createButton('Submit', false);
-    newSubmitButton.type = 'submit'; 
-    newSubmitButton.id = 'submit';
-
-    domRefs.submitButton.parentNode.replaceChild(newSubmitButton, domRefs.submitButton);
-
-    domRefs.submitButton = newSubmitButton;
+    domRefs.submitButton.classList.add('button');
 
     toggleVisibility(domRefs.endScreen, true);
 }
@@ -306,8 +300,12 @@ function displayHighScores() {
 
 function saveHighScore(event) {
     event.preventDefault();
-    const initials = domRefs.initialsInput.value;
-    const finalScore = domRefs.finalScoreElement.textContent;
+    const initials = domRefs.initialsInput.value.trim();
+    if (!initials) {
+        alert("Please enter your initials.");
+        return;
+    }
+    const finalScore = state.score;
     const highscore = {
         score: finalScore,
         initials: initials
@@ -333,4 +331,6 @@ function clearHighScores() {
     displayHighScores();
 }
 
-initializeQuiz();
+document.addEventListener('DOMContentLoaded', function() {
+    initializeQuiz();
+});
