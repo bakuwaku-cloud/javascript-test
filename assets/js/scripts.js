@@ -183,14 +183,15 @@ function shuffleQuestions(questionsArray) {
 }
 
 function updateScore(correct) {
-    const pointsPerQuestion = 100 / questions.length; 
+    const pointsPerQuestion = 100 / questions.length;
     if (correct) {
         state.score += pointsPerQuestion;
-        state.score = Math.min(state.score, 100); 
     } else {
+
         state.timeLeft = Math.max(0, state.timeLeft - 10);
         domRefs.timerElement.textContent = `${state.timeLeft}`;
     }
+    state.score = Math.max(0, Math.min(state.score, 100));
 }
 
 function resetQuiz() {
