@@ -183,11 +183,13 @@ function shuffleQuestions(questionsArray) {
 }
 
 function updateScore(correct) {
-    const pointsPerQuestion = 100 / questions.length;
-    if (correct) {
-        state.score += pointsPerQuestion;
-    } else {
+    const pointsPerCorrectAnswer = 20;
+    const penaltyForWrongAnswer = 10;
 
+    if (correct) {
+        state.score += pointsPerCorrectAnswer;
+    } else {
+        state.score -= penaltyForWrongAnswer;
         state.timeLeft = Math.max(0, state.timeLeft - 10);
         domRefs.timerElement.textContent = `${state.timeLeft}`;
     }
