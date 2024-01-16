@@ -242,6 +242,15 @@ function endGame() {
     toggleVisibility(domRefs.timerElement, false);
     toggleVisibility(domRefs.questionContainer, false);
     domRefs.finalScoreElement.textContent = state.score;
+
+    let newSubmitButton = createButton('Submit', false);
+    newSubmitButton.type = 'submit'; 
+    newSubmitButton.id = 'submit';
+
+    domRefs.submitButton.parentNode.replaceChild(newSubmitButton, domRefs.submitButton);
+
+    domRefs.submitButton = newSubmitButton;
+
     toggleVisibility(domRefs.endScreen, true);
 }
 
