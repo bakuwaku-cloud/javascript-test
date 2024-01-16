@@ -172,11 +172,13 @@ function resetState() {
 }
 
 function shuffleQuestions(questionsArray) {
+    console.log("Shuffling questions");
     const array = questionsArray.slice();
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]]; 
     }
+    console.log("Shuffled questions: ", array);
     return array;
 }
 
@@ -251,6 +253,7 @@ function endGame() {
 
 // question functions
 function showQuestion(question) {
+    console.log("Showing question: ", question);
     resetState();
     const questionTitle = document.createElement('h2');
     questionTitle.textContent = question.question;
@@ -260,7 +263,7 @@ function showQuestion(question) {
 }
 
 function setNextQuestion() {
-    console.log("Setting next question"); 
+    console.log("Setting next question, index: ", currentQuestionIndex);
     showQuestion(shuffledQuestions[currentQuestionIndex]);
 }
 
@@ -268,17 +271,31 @@ function queueNextQuestion() {
     if (currentQuestionIndex < shuffledQuestions.length - 1) {
         currentQuestionIndex++;
         setNextQuestion();
+        console.log("Queue next question, current index: ", currentQuestionIndex);
     } else {
         endGame();
     }
 }
 
 function selectAnswer(event) {
+    event.preventDefault();
+    event.stopPropagation();
     const selectedButton = event.target;
+    const selectedAnswerText = selectedButton.innerText;
     const correct = selectedButton.dataset.correct;
+
+    console.log("Answer selected: " + selectedAnswerText); 
+    if (correct) {
+        console.log("The selected answer is correct.");
+    } else {
+        console.log("The selected answer is incorrect.");
+    }
+
     updateScore(correct);
     showFeedback(correct);
-    queueNextQuestion();
+    setTimeout(() => {
+        queueNextQuestion();
+    }, 1000);
 }
 
 // high score functions
