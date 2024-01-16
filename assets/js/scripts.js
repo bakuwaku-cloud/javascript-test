@@ -190,6 +190,17 @@ function updateScore(correct) {
     }
 }
 
+function updateScore(correct) {
+    const pointsPerQuestion = 100 / questions.length; 
+    if (correct) {
+        state.score += pointsPerQuestion;
+        state.score = Math.min(state.score, 100); 
+    } else {
+        state.timeLeft = Math.max(0, state.timeLeft - 10);
+        domRefs.timerElement.textContent = `${state.timeLeft}`;
+    }
+}
+
 function resetQuiz() {
     score = 0;
     currentQuestionIndex = 0;
