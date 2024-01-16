@@ -181,16 +181,6 @@ function shuffleQuestions(questionsArray) {
 }
 
 function updateScore(correct) {
-    if (correct) {
-        state.score += 20;
-    } else {
-        state.timeLeft = Math.max(0, state.timeLeft - 10);
-        domRefs.timerElement.textContent = `${state.timeLeft}`;
-        state.score = Math.max(0, state.score - 10);
-    }
-}
-
-function updateScore(correct) {
     const pointsPerQuestion = 100 / questions.length; 
     if (correct) {
         state.score += pointsPerQuestion;
