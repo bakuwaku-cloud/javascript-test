@@ -3,6 +3,7 @@ const state = {
     score: 0,
     currentQuestionIndex: 0,
     timerInterval: null,
+    timeLeft: 60,
 };
 
 // dom elements
@@ -85,16 +86,34 @@ const questions = [
 
 // helper functions
 function toggleVisibility(element, show) {
+    if (!element) return;
+    let displayStyle;
+    switch (element.tagName) {
+        case 'FORM':
+            displayStyle = 'block';
+            break;
+        case 'INPUT':
+        case 'BUTTON':
+        case 'LABEL':
+            displayStyle = 'inline-block';
+            break;
+        case 'SPAN':
+            if (element.id === 'time') {
+                displayStyle = 'inline';
+            } else {
+                displayStyle = 'inline-block';
+            }
+            break;
+        default:
+            displayStyle = 'block';
+    }
+    element.style.display = show ? displayStyle : 'none';
     if (show) {
-        element.style.display = 'block'; // or 'flex', 'inline-block', etc., depending on your layout
         Array.from(element.children).forEach(child => {
-            child.style.display = ''; // Remove the display style to allow default or CSS styling
+            toggleVisibility(child, true);
         });
-    } else {
-        element.style.display = 'none';
     }
 }
-
 
 function startTimer() {
     state.timeLeft = 60;
@@ -163,11 +182,11 @@ function shuffleQuestions(questionsArray) {
 
 function updateScore(correct) {
     if (correct) {
-        score += 20;
+        state.score += 20;
     } else {
-        timeLeft = Math.max(0, timeLeft - 10);
-        timerElement.textContent = timeLeft;
-        score = Math.max(0, score - 10);
+        state.timeLeft = Math.max(0, state.timeLeft - 10);
+        domRefs.timerElement.textContent = `${state.timeLeft}`;
+        state.score = Math.max(0, state.score - 10);
     }
 }
 
@@ -179,20 +198,18 @@ function resetQuiz() {
 }
 
 function showFeedback(correct) {
-    feedbackElement.textContent = correct ? 'Correct!' : 'Wrong!';
-    setTimeout(() => feedbackElement.textContent = '', 1000);
+    domRefs.feedbackElement.textContent = correct ? 'Correct!' : 'Wrong!';
+    setTimeout(() => domRefs.feedbackElement.textContent = '', 1000);
 }
 
 // initializing
 function initializeElementVisibility() {
     Object.values(domRefs).forEach(element => {
-        if (element) {
+        if (element && element.id !== 'quiz-intro' && element.id !== 'view-highscores') {
             element.style.display = 'none';
         }
     });
 }
-
-// todo: fix visual bug where h2 from high score is appending and not appending the quiz-intro container
 
 function initializeQuiz() {
     initializeElementVisibility();
@@ -221,10 +238,11 @@ function startGame() {
 }
 
 function endGame() {
-    clearInterval(timerInterval);
+    clearInterval(state.timerInterval);
     toggleVisibility(domRefs.timerElement, false);
-    domRefs.finalScoreElement.textContent = score;
-    toggleVisibility(document.getElementById('end-screen'), true);
+    toggleVisibility(domRefs.questionContainer, false);
+    domRefs.finalScoreElement.textContent = state.score;
+    toggleVisibility(domRefs.endScreen, true);
 }
 
 // question functions
