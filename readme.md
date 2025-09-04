@@ -1,7 +1,7 @@
 # Coding Quiz Challenge
 
 ## Description
-In this assignment I created a timed quiz from scratch utilizing different variables and techniques to create a seamless challenge.
+A timed quiz from scratch utilizing different variables and techniques to create a seamless challenge.
 
 The primary goal for this project was to familiarize myself with different object and variables to use in complex functions.
 While the purpose of this assignment was to learn skills about coding assessments, my main goal for approaching this challenge was to learn how to manage DOM loaded events and modularizing my javascript.
@@ -15,7 +15,7 @@ This assignment has taught me the basics of how local storage works as well as h
     - Also contains the option to clear your highscores from the board
 
 ## Usage
-- Visit the quiz here: https://astro0725.github.io/javascript-test/
+- Visit the quiz here: https://bakuwaku-cloud.github.io/javascript-test/
 
 - When you press "Start Quiz" you have 60 seconds to answer a few questions about JavaScript.
 - After you complete the test via finishing all the questions and/or the timer runs out the quiz will be over 
